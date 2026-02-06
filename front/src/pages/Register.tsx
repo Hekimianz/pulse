@@ -1,8 +1,12 @@
 import { ErrorMessage, FormikProvider, useFormik } from 'formik';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { object, ref, string } from 'yup';
+import { useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { register, user, loading, error, clearError } = useAuth();
   const shema = object({
     firstName: string()
       .required('First name is required')
@@ -38,8 +42,22 @@ export default function Register() {
       confPassword: '',
     },
     validationSchema: shema,
-    onSubmit: (values) => console.log(values),
+    onSubmit: async (values) => {
+      await register(values);
+      navigate('/login');
+    },
   });
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    clearError();
+  });
+
   return (
     <section className="flex pt-8 flex-col items-center">
       <h1 className="text-2xl w-full text-center font-bold">
@@ -59,6 +77,7 @@ export default function Register() {
             <ErrorMessage name="email" component="span" />
             <ErrorMessage name="password" component="span" />
             <ErrorMessage name="confPassword" component="span" />
+            {error && <div className="text-red-800">{error}</div>}
           </div>
           <div className="flex gap-4">
             <div className="flex flex-col gap-1 w-full">
@@ -72,6 +91,7 @@ export default function Register() {
                 value={formik.values.firstName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                disabled={loading}
               />
             </div>
             <div className="flex flex-col gap-1 w-full">
@@ -85,6 +105,7 @@ export default function Register() {
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                disabled={loading}
               />
             </div>
           </div>
@@ -99,6 +120,7 @@ export default function Register() {
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={loading}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -112,6 +134,7 @@ export default function Register() {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={loading}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -125,13 +148,15 @@ export default function Register() {
               value={formik.values.confPassword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={loading}
             />
           </div>
           <button
             type="submit"
             className="cursor-pointer rounded-md bg-primary text-center px-3 py-2 text-md font-[700] text-white transition-colors hover:bg-primary/90"
+            disabled={loading}
           >
-            Register
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
       </FormikProvider>
