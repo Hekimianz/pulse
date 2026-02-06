@@ -50,13 +50,13 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 md:flex">
           <Link
             to="/login"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
+            className="rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
           >
             Log in
           </Link>
           <Link
             to="/register"
-            className="rounded-md bg-primary text-center px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
+            className="rounded-md bg-primary text-center px-3 py-2 text-sm font-[700] text-white transition-colors hover:bg-primary/90"
           >
             Get Started
           </Link>
@@ -92,20 +92,20 @@ export default function Navbar() {
             </Link>
             <Link
               to="/about"
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               About
             </Link>
             <div className="mt-2 flex flex-col gap-2 border-t border-border pt-4">
               <Link
                 to="/login"
-                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
+                className="rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
               >
                 Log in
               </Link>
               <Link
                 to="/register"
-                className="rounded-md bg-primary text-center px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90"
+                className="rounded-md bg-primary text-center px-3 py-2 text-sm font-[700] text-white transition-colors hover:bg-primary/90"
               >
                 Get Started
               </Link>
