@@ -33,7 +33,7 @@ export default function Login() {
   }, [clearError]);
 
   return (
-    <section className="flex pt-8 flex-col items-center">
+    <section className="flex flex-1 pt-8 flex-col items-center">
       <h1 className="text-2xl w-full text-center font-bold">Welcome Back</h1>
       <p className="text-text/50 text-md">Enter your credentials to log in</p>
       <FormikProvider value={formik}>

@@ -59,7 +59,7 @@ export default function Register() {
   }, [clearError]);
 
   return (
-    <section className="flex pt-8 flex-col items-center">
+    <section className="flex flex-1 pt-8 flex-col items-center">
       <h1 className="text-2xl w-full text-center font-bold">
         Welcome to Pulse
       </h1>

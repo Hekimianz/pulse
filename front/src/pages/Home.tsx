@@ -12,8 +12,18 @@ import {
   Shield,
   TrendingUp,
 } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router';
 
 export default function Home() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
   return (
     <section className="flex flex-1 flex-col px-10 pt-5">
       <section className="flex flex-col items-center">
@@ -26,7 +36,14 @@ export default function Home() {
           smarter financial decisions.
         </p>
         <button className="cursor-pointer rounded-md bg-primary text-center px-8 py-2 text-lg font-bold text-white transition-colors hover:bg-primary/90 flex justify-center items-center">
-          Get Started Free <ChevronRight />
+          <Link to="/register" className="flex items-center">
+            Get Started Free <ChevronRight />
+          </Link>
+        </button>
+        <button className="cursor-pointer rounded-md bg-white border border-border mt-4 text-center px-8 py-2 text-lg font-bold text-primary transition-colors hover:bg-primary/10 flex justify-center items-center">
+          <Link to="/login" className="flex items-center">
+            Log in <ChevronRight />
+          </Link>
         </button>
         <div className="flex text-sm items-center justify-between w-full max-w-150 mt-10">
           <div className="flex gap-1 text-muted-foreground">
@@ -230,7 +247,14 @@ export default function Home() {
           about money.
         </p>
         <button className="cursor-pointer rounded-md bg-white text-center text-primary px-8 py-2 text-lg font-bold transition-colors hover:bg-white/90 flex justify-center items-center">
-          Get Started Free <ChevronRight />
+          <Link to="/register" className="flex items-center">
+            Get Started Free <ChevronRight />
+          </Link>
+        </button>
+        <button className="cursor-pointer rounded-md bg-primary border border-border text-center text-white px-8 py-2 text-lg font-bold transition-colors hover:bg-white/10 flex justify-center items-center">
+          <Link to="/login" className="flex items-center">
+            Log in <ChevronRight />
+          </Link>
         </button>
         <p className="text-sm text-white/80">
           No credit card required. 100% free. Always.
