@@ -49,32 +49,33 @@ export default function Navbar() {
             About
           </Link>
         </nav>
-        {user && (
-          <button
-            onClick={logout}
-            className="rounded-md border border-primary/30 cursor-pointer px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
-          >
-            Log out
-          </button>
-        )}
 
-        {!user && (
-          <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
+          {!user && (
             <Link
               to="/login"
               className="rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted-primary hover:text-primary"
             >
               Log in
             </Link>
+          )}
+          {!user && (
             <Link
               to="/register"
               className="rounded-md bg-primary text-center px-3 py-2 text-sm font-[700] text-white transition-colors hover:bg-primary/90"
             >
               Get Started
             </Link>
-          </div>
-        )}
-
+          )}
+          {user && (
+            <button
+              onClick={logout}
+              className="rounded-md border border-primary/30 cursor-pointer px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted-primary hover:text-primary "
+            >
+              Log out
+            </button>
+          )}
+        </div>
         <button
           aria-label="Toggle menu"
           type="button"

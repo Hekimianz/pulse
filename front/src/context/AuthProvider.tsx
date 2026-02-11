@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import {
   getMe,
   loginUser,
@@ -23,9 +23,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError(null);
-  };
+  }, []);
 
   const checkAuth = async () => {
     setError(null);

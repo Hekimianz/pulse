@@ -30,7 +30,7 @@ export default function Login() {
 
   useEffect(() => {
     clearError();
-  });
+  }, [clearError]);
 
   return (
     <section className="flex pt-8 flex-col items-center">
