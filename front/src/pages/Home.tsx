@@ -1,16 +1,21 @@
 import {
   ArrowDownLeft,
   ArrowUpRight,
+  Bell,
+  ChartColumn,
+  ChartPie,
   Check,
   ChevronRight,
   CreditCard,
   DollarSign,
+  Search,
+  Shield,
   TrendingUp,
 } from 'lucide-react';
 
 export default function Home() {
   return (
-    <section className="flex flex-1 flex-col px-10 py-5">
+    <section className="flex flex-1 flex-col px-10 pt-5">
       <section className="flex flex-col items-center">
         <h1 className="py-5 text-4xl w-70 font-bold text-center">
           Take Control of Your <span className="text-primary">Finances</span>
@@ -145,6 +150,91 @@ export default function Home() {
             27% remaining this month
           </span>
         </div>
+      </section>
+      <section className="flex flex-col items-center text-center mt-15">
+        <h2 className="text-3xl font-bold w-100">
+          Everything you need to manage your money
+        </h2>
+        <p className="text-muted-foreground mt-4 w-full ">
+          Pulse brings all your financial tools together in one beautiful,
+          easy-to-use app.
+        </p>
+
+        <div className="group border border-border shadow rounded-md flex items-start mt-8 gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="group-hover:bg-primary/20 transition-all duration-200 bg-muted-primary text-primary rounded p-3 w-fit">
+            <Search />
+          </span>
+          <h4 className="font-bold text-lg">Smart Expense Tracking</h4>
+          <p className="text-muted-foreground text-start">
+            Log income and expenses with categories, search, and powerful
+            filters. Easily find any transaction in seconds.
+          </p>
+        </div>
+        <div className="group border border-border shadow rounded-md flex mt-8 items-start gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="bg-muted-primary text-primary rounded p-3 w-fit group-hover:bg-primary/20 transition-all duration-200">
+            <CreditCard />
+          </span>
+          <h4 className="font-bold text-lg">Subscription Management</h4>
+          <p className="text-muted-foreground text-start">
+            Never miss a payment. Track all your recurring charges in one place
+            with renewal reminders and cost insights.
+          </p>
+        </div>
+        <div className="group border border-border shadow rounded-md flex items-start mt-8 gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="bg-muted-primary text-primary rounded p-3 w-fit group-hover:bg-primary/20 transition-all duration-200">
+            <ChartPie />
+          </span>
+          <h4 className="font-bold text-lg">Budget Insights</h4>
+          <p className="text-muted-foreground text-start">
+            Set monthly budgets and get visual progress tracking with beautiful
+            charts and actionable recommendations.
+          </p>
+        </div>
+        <div className="group border border-border shadow rounded-md flex mt-8 items-start gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="bg-muted-primary text-primary rounded p-3 w-fit group-hover:bg-primary/20 transition-all duration-200">
+            <ChartColumn />
+          </span>
+          <h4 className="font-bold text-lg">Spending Analytics</h4>
+          <p className="text-muted-foreground text-start">
+            Understand your spending patterns with detailed breakdowns by
+            category, time period, and merchant.
+          </p>
+        </div>
+        <div className="group border border-border shadow rounded-md flex items-start mt-8 gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="bg-muted-primary text-primary rounded p-3 w-fit group-hover:bg-primary/20 transition-all duration-200">
+            <Bell />
+          </span>
+          <h4 className="font-bold text-lg">Smart Alerts</h4>
+          <p className="text-muted-foreground text-start">
+            Get notified when bills are due, budgets are exceeded, or unusual
+            spending is detected.
+          </p>
+        </div>
+        <div className="group border border-border shadow rounded-md flex mt-8 items-start gap-3 flex-col w-full px-8 py-4 hover:shadow-lg transition-all duration-200">
+          <span className="bg-muted-primary text-primary rounded p-3 w-fit group-hover:bg-primary/20 transition-all duration-200">
+            <Shield />
+          </span>
+          <h4 className="font-bold text-lg">Bank-Level Security</h4>
+          <p className="text-muted-foreground text-start">
+            Your data is encrypted and protected with the same security
+            standards used by major banks.
+          </p>
+        </div>
+      </section>
+      <section className="flex flex-col bg-primary text-white w-[100vw] -mx-10 text-center items-center gap-5 py-8 mt-10">
+        <h3 className="text-3xl font-bold">
+          Ready to take control of your finances?
+        </h3>
+        <p className="text-white/80 w-120">
+          Join thousands of users who are already saving more and stressing less
+          about money.
+        </p>
+        <button className="cursor-pointer rounded-md bg-white text-center text-primary px-8 py-2 text-lg font-bold transition-colors hover:bg-white/90 flex justify-center items-center">
+          Get Started Free <ChevronRight />
+        </button>
+        <p className="text-sm text-white/80">
+          No credit card required. 100% free. Always.
+        </p>
       </section>
     </section>
   );
