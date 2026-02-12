@@ -23,6 +23,9 @@ export default function Register() {
       .min(3, 'Last name must be at least 2 characters')
       .max(50, 'Last name must be at most 50 characters')
       .matches(/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/, 'Last name can only contain letters'),
+    budget: string()
+      .required('Please include a monthly budget.')
+      .min(1, 'Monthly budget needs to be at least 1'),
     email: string()
       .email('Email must be a valid address')
       .required('Email is required')
@@ -40,6 +43,7 @@ export default function Register() {
       email: '',
       password: '',
       confPassword: '',
+      budget: '',
     },
     validationSchema: shema,
     onSubmit: async (values) => {
@@ -77,6 +81,7 @@ export default function Register() {
             <ErrorMessage name="email" component="span" />
             <ErrorMessage name="password" component="span" />
             <ErrorMessage name="confPassword" component="span" />
+            <ErrorMessage name="budget" component="span" />
             {error && <div className="text-red-800">{error}</div>}
           </div>
           <div className="flex gap-4">
@@ -118,6 +123,20 @@ export default function Register() {
               id="email"
               placeholder="you@example.com"
               value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              disabled={loading}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label htmlFor="budget">Monthly Budget:</label>
+            <input
+              className={`w-full py-2 pl-2 border border-border rounded focus:outline-primary hover:border-primary transition-all ${formik.touched.budget && formik.errors.budget ? 'border-red-800 bg-red-100/50' : ''}`}
+              type="number"
+              name="budget"
+              id="budget"
+              placeholder="100"
+              value={formik.values.budget}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               disabled={loading}

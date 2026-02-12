@@ -15,6 +15,7 @@ export interface RegisterValues {
   lastName: string;
   password: string;
   confPassword: string;
+  budget: string;
 }
 
 export interface RegisterResponse {
@@ -60,6 +61,7 @@ export async function registerUser(
       firstName: values.firstName,
       lastName: values.lastName,
       password: values.password,
+      budget: values.budget,
     }),
   });
   if (!res.ok) {
