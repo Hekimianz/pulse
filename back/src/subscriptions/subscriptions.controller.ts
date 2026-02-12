@@ -16,16 +16,15 @@ import type { Payload } from 'src/auth/jwt.strategy';
 import { CreateSub } from './DTOs/create-sub.dto';
 
 @Controller('subscriptions')
+@UseGuards(JwtAuth)
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
-  @UseGuards(JwtAuth)
   @Get()
   public async findSubs(@CurrentUser() user: Payload): Promise<Subscription[]> {
     return await this.subscriptionsService.findSubs(user.sub);
   }
 
-  @UseGuards(JwtAuth)
   @Get(':id')
   public async findSubById(
     @CurrentUser() user: Payload,
@@ -34,7 +33,6 @@ export class SubscriptionsController {
     return await this.subscriptionsService.findSubById(user.sub, id);
   }
 
-  @UseGuards(JwtAuth)
   @Post()
   public async createSub(
     @CurrentUser() user: Payload,
@@ -43,7 +41,6 @@ export class SubscriptionsController {
     return await this.subscriptionsService.createSub(user.sub, dto);
   }
 
-  @UseGuards(JwtAuth)
   @Patch(':id')
   public async deleteSub(
     @Param('id', new ParseUUIDPipe()) id: string,

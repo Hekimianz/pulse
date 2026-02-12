@@ -14,6 +14,11 @@ export enum Status {
   REFUNDED = 'Refunded',
 }
 
+export enum TransactionType {
+  INCOME = 'income',
+  EXPENSE = 'expense',
+}
+
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn('uuid')
@@ -40,4 +45,7 @@ export class Transaction {
 
   @Column({ type: 'enum', enum: Status, default: Status.PAID })
   status: Status;
+
+  @Column({ type: 'enum', enum: TransactionType })
+  transactionType: TransactionType;
 }

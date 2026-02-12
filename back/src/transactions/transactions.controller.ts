@@ -17,10 +17,10 @@ import type { Payload } from 'src/auth/jwt.strategy';
 import { CreateTransactionDTO } from './DTOs/create-transaction.dto';
 
 @Controller('transactions')
+@UseGuards(JwtAuth)
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
-  @UseGuards(JwtAuth)
   @Get()
   public async getTransactions(
     @CurrentUser() user: Payload,
@@ -28,7 +28,20 @@ export class TransactionsController {
     return await this.transactionsService.getTransactions(user.sub);
   }
 
-  @UseGuards(JwtAuth)
+  @Get('/expenses')
+  public async getExpenses(
+    @CurrentUser() user: Payload,
+  ): Promise<Transaction[]> {
+    return await this.transactionsService.getExpenses(user.sub);
+  }
+
+  @Get('/incomes')
+  public async getIncomes(
+    @CurrentUser() user: Payload,
+  ): Promise<Transaction[]> {
+    return await this.transactionsService.getIncomes(user.sub);
+  }
+
   @Get(':id')
   public async getTransactionById(
     @CurrentUser() user: Payload,
@@ -37,7 +50,6 @@ export class TransactionsController {
     return await this.transactionsService.getTransactionById(id, user.sub);
   }
 
-  @UseGuards(JwtAuth)
   @Post()
   public async createTransaction(
     @CurrentUser() user: Payload,
@@ -46,7 +58,6 @@ export class TransactionsController {
     return await this.transactionsService.createTransaction(user.sub, dto);
   }
 
-  @UseGuards(JwtAuth)
   @Patch('/refund/:id')
   public async refundTransaction(
     @CurrentUser() user: Payload,
@@ -55,7 +66,6 @@ export class TransactionsController {
     return await this.transactionsService.refundTransaction(user.sub, id);
   }
 
-  @UseGuards(JwtAuth)
   @Delete('/:id')
   public async deleteTransaction(
     @CurrentUser() user: Payload,

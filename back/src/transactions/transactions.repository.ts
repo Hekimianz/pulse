@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Status, Transaction } from './entities/Transaction.entity';
+import {
+  Status,
+  Transaction,
+  TransactionType,
+} from './entities/Transaction.entity';
 import { Repository } from 'typeorm';
 import { CreateTransactionDTO } from './DTOs/create-transaction.dto';
 
@@ -13,6 +17,18 @@ export class TransactionsRepository {
 
   async getTransactions(userId: string): Promise<Transaction[]> {
     return await this.transactionsRepository.find({ where: { userId } });
+  }
+
+  async getExpenses(userId: string): Promise<Transaction[]> {
+    return await this.transactionsRepository.find({
+      where: { userId, transactionType: TransactionType.EXPENSE },
+    });
+  }
+
+  async getIncomes(userId: string): Promise<Transaction[]> {
+    return await this.transactionsRepository.find({
+      where: { userId, transactionType: TransactionType.INCOME },
+    });
   }
 
   async getTransactionById(id: string): Promise<Transaction | null> {

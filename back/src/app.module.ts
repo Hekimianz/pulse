@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { TransactionsModule } from './transactions/transactions.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { TransactionsModule } from './transactions/transactions.module';
     AuthModule,
     SubscriptionsModule,
     TransactionsModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],

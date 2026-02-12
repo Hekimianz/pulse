@@ -17,6 +17,14 @@ export class TransactionsService {
     return await this.transactionsRepository.getTransactions(userId);
   }
 
+  async getExpenses(userId: string): Promise<Transaction[]> {
+    return await this.transactionsRepository.getExpenses(userId);
+  }
+
+  async getIncomes(userId: string): Promise<Transaction[]> {
+    return await this.transactionsRepository.getIncomes(userId);
+  }
+
   async getTransactionById(id: string, userId: string): Promise<Transaction> {
     const transaction =
       await this.transactionsRepository.getTransactionById(id);
