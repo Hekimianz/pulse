@@ -4,6 +4,8 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     UsersModule,
     AuthModule,
+    SubscriptionsModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [],

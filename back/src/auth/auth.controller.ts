@@ -28,6 +28,7 @@ export class AuthController {
   @UseGuards(JwtAuth)
   @Get('me')
   async getMe(@CurrentUser() user: Payload): Promise<Omit<User, 'password'>> {
+    console.log(user);
     return await this.authService.findById(user.sub);
   }
 }

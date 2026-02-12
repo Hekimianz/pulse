@@ -13,4 +13,7 @@ export class RegisterUserDTO {
 
   @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  budget: string;
 }
