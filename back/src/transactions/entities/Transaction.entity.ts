@@ -1,10 +1,18 @@
 import { Category } from 'src/subscriptions/entities/Subscription.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+export enum Status {
+  PAID = 'Paid',
+  REFUNDED = 'Refunded',
+}
 
 @Entity()
 export class Transaction {
@@ -22,4 +30,14 @@ export class Transaction {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.transactions)
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column()
+  userId: string;
+
+  @Column({ type: 'enum', enum: Status, default: Status.PAID })
+  status: Status;
 }

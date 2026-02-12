@@ -1,5 +1,6 @@
 import { Role } from 'src/common/enums/user-role.enum';
 import { Subscription } from 'src/subscriptions/entities/Subscription.entity';
+import { Transaction } from 'src/transactions/entities/Transaction.entity';
 import {
   Column,
   CreateDateColumn,
@@ -40,4 +41,7 @@ export class User {
 
   @OneToMany(() => Subscription, (sub) => sub.user)
   subscriptions: Subscription[];
+
+  @OneToMany(() => Transaction, (tran) => tran.user)
+  transactions: Transaction[];
 }
