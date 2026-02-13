@@ -9,11 +9,11 @@ export interface DashboardResponse {
   budgetPercentage: number;
   isOverBudget: boolean;
   percentOverBudget: number | null;
-  largestExpense: Transaction;
+  largestExpense: Transaction | null;
   avgSpentPerDay: number;
   monthlySubs: number;
   activeSubs: number;
-  mostExpensiveSub: Subscription;
+  mostExpensiveSub: Subscription | null;
   yearlySubs: number;
   subsPercentOfBudget: number;
 }

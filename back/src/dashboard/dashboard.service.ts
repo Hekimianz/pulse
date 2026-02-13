@@ -66,11 +66,12 @@ export class DashboardService {
     return +(((expenses - +user.budget) / +user.budget) * 100).toFixed(1);
   }
 
-  async getLargestExpense(userId: string): Promise<Transaction> {
+  async getLargestExpense(userId: string): Promise<Transaction | null> {
     const transactions = await this.transactionsService.getTransactions(userId);
     const expenses = transactions.filter(
       (trans) => trans.transactionType === TransactionType.EXPENSE,
     );
+    if (expenses.length < 1) return null;
     return expenses.reduce((max, obj) => (obj.price > max.price ? obj : max));
   }
 
@@ -108,9 +109,10 @@ export class DashboardService {
     return subs.filter((sub) => sub.active).length;
   }
 
-  async mostExpensiveSub(userId: string): Promise<Subscription> {
+  async mostExpensiveSub(userId: string): Promise<Subscription | null> {
     const subs = await this.subscriptionsService.findSubs(userId);
     const activeSubs = subs.filter((sub) => sub.active);
+    if (activeSubs.length < 1) return null;
     return activeSubs.reduce((max, obj) => (obj.price > max.price ? obj : max));
   }
 
