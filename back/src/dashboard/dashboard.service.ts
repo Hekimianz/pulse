@@ -6,7 +6,7 @@ import {
 } from 'src/transactions/entities/Transaction.entity';
 import { TransactionsService } from 'src/transactions/transactions.service';
 import { UsersService } from 'src/users/users.service';
-import { DashboardResponse } from './dashboard.type';
+import { DashboardResponse, TransactionsResponse } from './dashboard.type';
 import {
   SubLength,
   Subscription,
@@ -44,13 +44,15 @@ export class DashboardService {
   async getRemainingBudget(userId: string): Promise<number> {
     const expenses = await this.getExpenses(userId);
     const user = await this.usersService.findById(userId);
-    return +(+user.budget - expenses).toFixed(2);
+    const remainingbudget = +(+user.budget - expenses).toFixed(2);
+    return remainingbudget <= 0 ? 0 : remainingbudget;
   }
 
   async getBudgetPercentage(userId: string): Promise<number> {
     const expenses = await this.getExpenses(userId);
     const user = await this.usersService.findById(userId);
-    return +((expenses / +user.budget) * 100).toFixed(1);
+    const remainingPerc = +((expenses / +user.budget) * 100).toFixed(1);
+    return remainingPerc >= 100 ? 100 : remainingPerc;
   }
   async isOverBudget(userId: string): Promise<boolean> {
     const expenses = await this.getExpenses(userId);
@@ -123,6 +125,10 @@ export class DashboardService {
     return parseFloat(((subsTotal / +user.budget) * 100).toFixed(2));
   }
 
+  async getAllTransactions(userId: string): Promise<Transaction[]> {
+    return await this.transactionsService.getTransactions(userId);
+  }
+
   async getDashboard(userId: string): Promise<DashboardResponse> {
     return {
       expenses: await this.getExpenses(userId),
@@ -139,6 +145,15 @@ export class DashboardService {
       activeSubs: await this.totalActiveSubs(userId),
       mostExpensiveSub: await this.mostExpensiveSub(userId),
       subsPercentOfBudget: await this.subscriptionPercentOfBudget(userId),
+    };
+  }
+
+  async getTransaction(userId: string): Promise<TransactionsResponse> {
+    return {
+      transactions: await this.getAllTransactions(userId),
+      income: await this.getIncomes(userId),
+      expense: await this.getExpenses(userId),
+      balance: await this.getBalance(userId),
     };
   }
 }

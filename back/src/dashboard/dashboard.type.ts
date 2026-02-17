@@ -17,3 +17,10 @@ export interface DashboardResponse {
   yearlySubs: number;
   subsPercentOfBudget: number;
 }
+
+export interface TransactionsResponse {
+  transactions: Transaction[];
+  income: number;
+  expense: number;
+  balance: number;
+}
