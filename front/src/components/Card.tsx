@@ -16,9 +16,9 @@ interface PropsType {
   avgExp?: number;
   budgetPercUsed?: number;
   type: string;
-  largestExpense?: Transaction;
+  largestExpense?: Transaction | null;
   monthlySubs?: number;
-  mostExpSub?: Subscription;
+  mostExpSub?: Subscription | null;
   yearlySubs?: number;
   subsPercOfBudget?: number;
   subsActive?: number;
@@ -36,20 +36,33 @@ export default function Card(props: PropsType) {
       <span
         className={`mt-2 font-bold text-3xl ${props.balance! > 0 ? 'text-primary' : 'text-red-800'}`}
       >
-        {props.balance?.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })}
+        {props.balance !== 0 &&
+          props.balance?.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          })}
       </span>
-      <span className=" text-muted-foreground">Income - Expenses</span>
-      <span
-        className={`flex gap-2 items-center text-sm mt-4 ${props.balance! > 0 ? 'text-primary' : 'text-red-800'}`}
-      >
-        {props.balance! > 0 ? <ArrowUp size={17} /> : <ArrowDown size={17} />}
-        {props.balance! > 0
-          ? 'Income exceeds expenses'
-          : 'Expenses exceed income'}
-      </span>
+      {props.balance !== 0 ? (
+        <>
+          <span className=" text-muted-foreground">Income - Expenses</span>
+          <span
+            className={`flex gap-2 items-center text-sm mt-4 ${props.balance! > 0 ? 'text-primary' : 'text-red-800'}`}
+          >
+            {props.balance! > 0 ? (
+              <ArrowUp size={17} />
+            ) : (
+              <ArrowDown size={17} />
+            )}
+            {props.balance! > 0
+              ? 'Income exceeds expenses'
+              : 'Expenses exceed income'}
+          </span>
+        </>
+      ) : (
+        <span className="text-muted-foreground">
+          You have no transactions yet.
+        </span>
+      )}
     </>
   );
   const expensesCard = (
@@ -146,20 +159,22 @@ export default function Card(props: PropsType) {
           <span className="text-muted-foreground text-sm">AVG DAILY SPENT</span>
         </div>
       </div>
-      <div className="flex justify-between mt-6 text-muted-foreground">
-        <h3>Largest Expense</h3>
-        <div className="flex flex-col items-end">
-          <span>
-            {props.largestExpense?.price.toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD',
-            })}
-          </span>
-          <span>
-            {props.largestExpense?.name} • {props.largestExpense?.category}
-          </span>
+      {props.largestExpense && (
+        <div className="flex justify-between mt-6 text-muted-foreground">
+          <h3>Largest Expense</h3>
+          <div className="flex flex-col items-end">
+            <span>
+              {Number(props.largestExpense?.price).toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+            <span>
+              {props.largestExpense?.name} • {props.largestExpense?.category}
+            </span>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
   const subscriptionsCard = (
@@ -170,42 +185,50 @@ export default function Card(props: PropsType) {
           <Smartphone />
         </span>
       </div>
-      <span className="mt-2 font-bold text-3xl text-primary">
-        {props.monthlySubs?.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        })}
-      </span>
-      <span className="text-muted-foreground">
-        Monthly cost • {props.subsActive} active
-      </span>
-      <div className="flex text-muted-foreground border-b border-border items-center justify-between py-2">
-        <h3>Most Expensive</h3>
-        <div className="flex flex-col items-end">
-          <span>
-            {props.mostExpSub?.price.toLocaleString('en-US', {
+      {props.mostExpSub ? (
+        <>
+          <span className="mt-2 font-bold text-3xl text-primary">
+            {props.monthlySubs?.toLocaleString('en-US', {
               style: 'currency',
               currency: 'USD',
             })}
           </span>
-          <span>
-            {props.mostExpSub?.name} • {props.mostExpSub?.subLength}
+          <span className="text-muted-foreground">
+            Monthly cost • {props.subsActive} active
           </span>
-        </div>
-      </div>
-      <div className="flex text-muted-foreground border-b border-border items-center justify-between py-4">
-        <h3>Yearly Total</h3>
-        <span>
-          {props.yearlySubs?.toLocaleString('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          })}
+          <div className="flex text-muted-foreground border-b border-border items-center justify-between py-2">
+            <h3>Most Expensive</h3>
+            <div className="flex flex-col items-end">
+              <span>
+                {Number(props.mostExpSub?.price).toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
+              </span>
+              <span>
+                {props.mostExpSub?.name} • {props.mostExpSub?.subLength}
+              </span>
+            </div>
+          </div>
+          <div className="flex text-muted-foreground border-b border-border items-center justify-between py-4">
+            <h3>Yearly Total</h3>
+            <span>
+              {props.yearlySubs?.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+          </div>
+          <div className="flex text-muted-foreground border-b border-border items-center justify-between py-4">
+            <h3>% of Budget</h3>
+            <span>{props.subsPercOfBudget}%</span>
+          </div>
+        </>
+      ) : (
+        <span className="text-muted-foreground">
+          You have no subscriptions yet
         </span>
-      </div>
-      <div className="flex text-muted-foreground border-b border-border items-center justify-between py-4">
-        <h3>% of Budget</h3>
-        <span>{props.subsPercOfBudget}%</span>
-      </div>
+      )}
     </>
   );
   let activeCard = null;
