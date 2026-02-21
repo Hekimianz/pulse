@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import Transactions from './pages/Transactions';
 import Subscriptions from './pages/Subscriptions';
+import AddTransaction from './pages/AddTransaction';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/transactions/create" element={<AddTransaction />} />
         </Routes>
         <Footer />
       </BrowserRouter>

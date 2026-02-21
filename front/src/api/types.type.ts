@@ -43,3 +43,10 @@ export interface TransactionsResponse {
   expense: number;
   balance: number;
 }
+
+export interface CreateTransactionPayload {
+  name: string;
+  price: string;
+  category: string;
+  transactionType: string;
+}

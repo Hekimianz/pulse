@@ -1,5 +1,10 @@
 import type { ErrorResponse } from './auth';
-import type { DashboardResponse, TransactionsResponse } from './types.type';
+import type {
+  CreateTransactionPayload,
+  DashboardResponse,
+  Transaction,
+  TransactionsResponse,
+} from './types.type';
 
 export async function getDashboard(): Promise<DashboardResponse> {
   const token = localStorage.getItem('token');
@@ -33,5 +38,30 @@ export async function getTransactions(): Promise<TransactionsResponse> {
     throw new Error(errorData.message);
   }
   const data: TransactionsResponse = await res.json();
+  return data;
+}
+
+export async function createTransaction(
+  payload: CreateTransactionPayload,
+): Promise<Transaction> {
+  const token = localStorage.getItem('token');
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/transactions`,
+
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ ...payload, price: Number(payload.price) }),
+    },
+  );
+  if (!res.ok) {
+    const errorData: ErrorResponse = await res.json();
+    throw new Error(errorData.message);
+  }
+  const data: Transaction = await res.json();
   return data;
 }

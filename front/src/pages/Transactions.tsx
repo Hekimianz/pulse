@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { useEffect, useMemo, useState } from 'react';
 import { getTransactions } from '../api/api';
@@ -115,7 +115,7 @@ export default function Transactions() {
         </div>
       </div>
 
-      <div className="flex mt-8 w-full max-w-250 self-center justify-between border-b border-border pb-8">
+      <div className="grid grid-cols-1fr md:grid-cols-4 mt-8 w-full max-w-250 self-center border-b border-border pb-8 gap-4">
         <input
           type="text"
           placeholder="Search transactions..."
@@ -149,6 +149,13 @@ export default function Transactions() {
           />
           Expense
         </button>
+        <Link className="text-center" to={'/transactions/create'}>
+          <button
+            className={`bg-primary/0 text-foreground border-border border py-2 px-4 rounded-xl cursor-pointer hover:shadow-md transaction-all duration-200 hover:bg-primary hover:text-white`}
+          >
+            Add Transaction
+          </button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1fr gap-4 items-center w-full max-w-300 self-center">
