@@ -13,16 +13,20 @@ export class TransactionsService {
     private readonly transactionsRepository: TransactionsRepository,
   ) {}
 
-  async getTransactions(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.getTransactions(userId);
+  async getTransactions(userId: string, page: number, limit: number) {
+    return await this.transactionsRepository.getTransactions(
+      userId,
+      page,
+      limit,
+    );
   }
 
-  async getExpenses(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.getExpenses(userId);
+  async getExpenses(userId: string, page: number, limit: number) {
+    return await this.transactionsRepository.getExpenses(userId, page, limit);
   }
 
-  async getIncomes(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.getIncomes(userId);
+  async getIncomes(userId: string, page: number, limit: number) {
+    return await this.transactionsRepository.getIncomes(userId, page, limit);
   }
 
   async getTransactionById(id: string, userId: string): Promise<Transaction> {

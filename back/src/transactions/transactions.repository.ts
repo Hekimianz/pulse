@@ -15,20 +15,37 @@ export class TransactionsRepository {
     private readonly transactionsRepository: Repository<Transaction>,
   ) {}
 
-  async getTransactions(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.find({ where: { userId } });
+  async getTransactions(userId: string, page: number, limit: number) {
+    const [data, total] = await this.transactionsRepository.findAndCount({
+      where: { user: { id: userId } },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { createdAt: 'DESC' },
+    });
+
+    return { data, total, page, totalPages: Math.ceil(total / limit) };
   }
 
-  async getExpenses(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.find({
+  async getExpenses(userId: string, page: number, limit: number) {
+    const [data, total] = await this.transactionsRepository.findAndCount({
       where: { userId, transactionType: TransactionType.EXPENSE },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { createdAt: 'DESC' },
     });
+
+    return { data, total, page, totalPages: Math.ceil(total / limit) };
   }
 
-  async getIncomes(userId: string): Promise<Transaction[]> {
-    return await this.transactionsRepository.find({
+  async getIncomes(userId: string, page: number, limit: number) {
+    const [data, total] = await this.transactionsRepository.findAndCount({
       where: { userId, transactionType: TransactionType.INCOME },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { createdAt: 'DESC' },
     });
+
+    return { data, total, page, totalPages: Math.ceil(total / limit) };
   }
 
   async getTransactionById(id: string): Promise<Transaction | null> {

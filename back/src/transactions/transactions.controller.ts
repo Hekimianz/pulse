@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
@@ -24,22 +25,47 @@ export class TransactionsController {
   @Get()
   public async getTransactions(
     @CurrentUser() user: Payload,
-  ): Promise<Transaction[]> {
-    return await this.transactionsService.getTransactions(user.sub);
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{
+    data: Transaction[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    return await this.transactionsService.getTransactions(
+      user.sub,
+      +page,
+      +limit,
+    );
   }
 
   @Get('/expenses')
   public async getExpenses(
     @CurrentUser() user: Payload,
-  ): Promise<Transaction[]> {
-    return await this.transactionsService.getExpenses(user.sub);
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{
+    data: Transaction[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    return await this.transactionsService.getExpenses(user.sub, +page, +limit);
   }
 
   @Get('/incomes')
   public async getIncomes(
     @CurrentUser() user: Payload,
-  ): Promise<Transaction[]> {
-    return await this.transactionsService.getIncomes(user.sub);
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ): Promise<{
+    data: Transaction[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    return await this.transactionsService.getIncomes(user.sub, +page, +limit);
   }
 
   @Get(':id')
