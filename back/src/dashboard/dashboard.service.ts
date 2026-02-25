@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 import {
   Transaction,
+  TransactionPageResponse,
   TransactionType,
 } from 'src/transactions/entities/Transaction.entity';
 import { TransactionsService } from 'src/transactions/transactions.service';
@@ -20,17 +21,39 @@ export class DashboardService {
     private readonly transactionsService: TransactionsService,
   ) {}
 
-  async getExpenses(userId: string): Promise<number> {
+  async getExpenses(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<number> {
     const user = await this.usersService.findById(userId);
-    const transactions = await this.transactionsService.getExpenses(user.id);
-    const expenses = transactions.reduce((sum, obj) => sum + +obj.price, 0);
+    const transactions = await this.transactionsService.getExpenses(
+      user.id,
+      page,
+      limit,
+    );
+    const expenses = transactions.data.reduce(
+      (sum, obj) => sum + +obj.price,
+      0,
+    );
     return +expenses.toFixed(2);
   }
 
-  async getIncomes(userId: string): Promise<number> {
+  async getIncomes(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<number> {
     const user = await this.usersService.findById(userId);
-    const transactions = await this.transactionsService.getIncomes(user.id);
-    const expenses = transactions.reduce((sum, obj) => sum + +obj.price, 0);
+    const transactions = await this.transactionsService.getIncomes(
+      user.id,
+      page,
+      limit,
+    );
+    const expenses = transactions.data.reduce(
+      (sum, obj) => sum + +obj.price,
+      0,
+    );
     return +expenses.toFixed(2);
   }
 
@@ -68,9 +91,17 @@ export class DashboardService {
     return +(((expenses - +user.budget) / +user.budget) * 100).toFixed(1);
   }
 
-  async getLargestExpense(userId: string): Promise<Transaction | null> {
-    const transactions = await this.transactionsService.getTransactions(userId);
-    const expenses = transactions.filter(
+  async getLargestExpense(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Transaction | null> {
+    const transactions = await this.transactionsService.getTransactions(
+      userId,
+      page,
+      limit,
+    );
+    const expenses = transactions.data.filter(
       (trans) => trans.transactionType === TransactionType.EXPENSE,
     );
     if (expenses.length < 1) return null;
@@ -125,8 +156,21 @@ export class DashboardService {
     return parseFloat(((subsTotal / +user.budget) * 100).toFixed(2));
   }
 
-  async getAllTransactions(userId: string): Promise<Transaction[]> {
-    return await this.transactionsService.getTransactions(userId);
+  async getAllTransactions(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+    filter?: string,
+    search?: string,
+  ): Promise<TransactionPageResponse> {
+    const transactions = await this.transactionsService.getTransactions(
+      userId,
+      page,
+      limit,
+      filter,
+      search,
+    );
+    return transactions;
   }
 
   async getDashboard(userId: string): Promise<DashboardResponse> {
@@ -148,9 +192,21 @@ export class DashboardService {
     };
   }
 
-  async getTransaction(userId: string): Promise<TransactionsResponse> {
+  async getTransaction(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: string,
+    search?: string,
+  ): Promise<TransactionsResponse> {
     return {
-      transactions: await this.getAllTransactions(userId),
+      transactions: await this.getAllTransactions(
+        userId,
+        page,
+        limit,
+        filter,
+        search,
+      ),
       income: await this.getIncomes(userId),
       expense: await this.getExpenses(userId),
       balance: await this.getBalance(userId),

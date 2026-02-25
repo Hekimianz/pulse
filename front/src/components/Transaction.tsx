@@ -7,7 +7,8 @@ interface PropsType {
   date: string;
   amount: string;
 }
-export default function Transaction({
+
+export default function TransactionComp({
   name,
   category,
   type,
@@ -19,27 +20,39 @@ export default function Transaction({
     day: 'numeric',
     year: 'numeric',
   });
+
   return (
-    <div className="flex border-b border-border w-full items-center h-20 justify-between">
-      <span
-        className={`p-3 rounded-xl  ${type !== 'expense' ? 'bg-muted-primary text-primary' : 'bg-[#f7dddc] text-[#e95f63]'}`}
-      >
-        <DollarSign />
-      </span>
-      <div className="flex flex-col">
-        <h3 className="max-w-30">{name}</h3>
-        <span className="text-muted-foreground text-sm">{category}</span>
+    <div className="flex border-b border-border w-full items-center h-20">
+      {/* Icon */}
+      <div className="w-12 shrink-0">
+        <span
+          className={`p-3 rounded-xl flex items-center justify-center w-fit ${type !== 'expense' ? 'bg-muted-primary text-primary' : 'bg-[#f7dddc] text-[#e95f63]'}`}
+        >
+          <DollarSign />
+        </span>
       </div>
-      <span className="text-muted-foreground">{formattedDate}</span>
-      <span className="text-lg">
-        {`${type === 'expense' ? '-' : ''} ${Number(amount).toLocaleString(
-          'en-US',
-          {
-            style: 'currency',
-            currency: 'USD',
-          },
-        )}`}
-      </span>
+
+      {/* Name + Category */}
+      <div className="flex flex-col w-48 shrink-0 px-2">
+        <h3 className="truncate font-medium" title={name}>
+          {name}
+        </h3>
+        <span className="text-muted-foreground text-sm truncate">
+          {category}
+        </span>
+      </div>
+
+      {/* Date */}
+      <div className="flex-1 text-muted-foreground text-sm">
+        {formattedDate}
+      </div>
+
+      {/* Amount */}
+      <div
+        className={`shrink-0 text-right font-medium ml-auto ${type === 'expense' ? 'text-[#e95f63]' : 'text-primary'}`}
+      >
+        {`${type === 'expense' ? '-' : '+'}${Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`}
+      </div>
     </div>
   );
 }

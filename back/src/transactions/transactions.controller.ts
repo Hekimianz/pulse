@@ -12,7 +12,10 @@ import {
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { JwtAuth } from 'src/auth/guards/jwt.guard';
-import { Transaction } from './entities/Transaction.entity';
+import {
+  Transaction,
+  TransactionPageResponse,
+} from './entities/Transaction.entity';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import type { Payload } from 'src/auth/jwt.strategy';
 import { CreateTransactionDTO } from './DTOs/create-transaction.dto';
@@ -27,16 +30,15 @@ export class TransactionsController {
     @CurrentUser() user: Payload,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-  ): Promise<{
-    data: Transaction[];
-    total: number;
-    page: number;
-    totalPages: number;
-  }> {
+    @Query('filter') filter?: string,
+    @Query('search') search?: string,
+  ): Promise<TransactionPageResponse> {
     return await this.transactionsService.getTransactions(
       user.sub,
       +page,
       +limit,
+      filter,
+      search,
     );
   }
 
@@ -45,12 +47,7 @@ export class TransactionsController {
     @CurrentUser() user: Payload,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-  ): Promise<{
-    data: Transaction[];
-    total: number;
-    page: number;
-    totalPages: number;
-  }> {
+  ): Promise<TransactionPageResponse> {
     return await this.transactionsService.getExpenses(user.sub, +page, +limit);
   }
 
@@ -59,12 +56,7 @@ export class TransactionsController {
     @CurrentUser() user: Payload,
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-  ): Promise<{
-    data: Transaction[];
-    total: number;
-    page: number;
-    totalPages: number;
-  }> {
+  ): Promise<TransactionPageResponse> {
     return await this.transactionsService.getIncomes(user.sub, +page, +limit);
   }
 

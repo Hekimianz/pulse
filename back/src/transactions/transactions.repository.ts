@@ -5,7 +5,7 @@ import {
   Transaction,
   TransactionType,
 } from './entities/Transaction.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { CreateTransactionDTO } from './DTOs/create-transaction.dto';
 
 @Injectable()
@@ -15,14 +15,25 @@ export class TransactionsRepository {
     private readonly transactionsRepository: Repository<Transaction>,
   ) {}
 
-  async getTransactions(userId: string, page: number, limit: number) {
+  async getTransactions(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: string,
+    search?: string,
+  ) {
     const [data, total] = await this.transactionsRepository.findAndCount({
-      where: { user: { id: userId } },
+      where: {
+        user: { id: userId },
+        ...(filter && {
+          transactionType: filter as Transaction['transactionType'],
+        }),
+        ...(search && { name: ILike(`%${search}%`) }),
+      } as FindOptionsWhere<Transaction>,
       skip: (page - 1) * limit,
       take: limit,
       order: { createdAt: 'DESC' },
     });
-
     return { data, total, page, totalPages: Math.ceil(total / limit) };
   }
 

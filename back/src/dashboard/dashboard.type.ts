@@ -1,5 +1,8 @@
 import { Subscription } from 'src/subscriptions/entities/Subscription.entity';
-import { Transaction } from 'src/transactions/entities/Transaction.entity';
+import {
+  Transaction,
+  TransactionPageResponse,
+} from 'src/transactions/entities/Transaction.entity';
 
 export interface DashboardResponse {
   expenses: number;
@@ -19,7 +22,7 @@ export interface DashboardResponse {
 }
 
 export interface TransactionsResponse {
-  transactions: Transaction[];
+  transactions: TransactionPageResponse;
   income: number;
   expense: number;
   balance: number;

@@ -13,11 +13,19 @@ export class TransactionsService {
     private readonly transactionsRepository: TransactionsRepository,
   ) {}
 
-  async getTransactions(userId: string, page: number, limit: number) {
+  async getTransactions(
+    userId: string,
+    page: number,
+    limit: number,
+    filter?: string,
+    search?: string,
+  ) {
     return await this.transactionsRepository.getTransactions(
       userId,
       page,
       limit,
+      filter,
+      search,
     );
   }
 

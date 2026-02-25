@@ -22,10 +22,17 @@ export async function getDashboard(): Promise<DashboardResponse> {
   return data;
 }
 
-export async function getTransactions(): Promise<TransactionsResponse> {
+export async function getTransactions(
+  page: number = 1,
+  filter?: string,
+  search?: string,
+): Promise<TransactionsResponse> {
   const token = localStorage.getItem('token');
+  const params = new URLSearchParams({ page: String(page), limit: '10' });
+  if (filter) params.set('filter', filter);
+  if (search) params.set('search', search);
   const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/dashboard/transactions`,
+    `${import.meta.env.VITE_API_URL}/dashboard/transactions?${params.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

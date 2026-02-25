@@ -19,6 +19,13 @@ export enum TransactionType {
   EXPENSE = 'expense',
 }
 
+export interface TransactionPageResponse {
+  data: Transaction[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn('uuid')

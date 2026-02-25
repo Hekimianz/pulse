@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import type { Payload } from 'src/auth/jwt.strategy';
@@ -20,7 +20,17 @@ export class DashboardController {
   @Get('/transactions')
   public async getTransactions(
     @CurrentUser() user: Payload,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('filter') filter?: string,
+    @Query('search') search?: string,
   ): Promise<TransactionsResponse> {
-    return await this.dashboardService.getTransaction(user.sub);
+    return await this.dashboardService.getTransaction(
+      user.sub,
+      +page,
+      +limit,
+      filter,
+      search,
+    );
   }
 }

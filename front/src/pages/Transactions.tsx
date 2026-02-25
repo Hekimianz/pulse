@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getTransactions } from '../api/api';
 import type { TransactionsResponse } from '../api/types.type';
 import { DollarSign, Dot, TrendingDown, TrendingUp } from 'lucide-react';
-import Transaction from '../components/Transaction';
+import TransactionComp from '../components/Transaction';
 
 export default function Transactions() {
   const { user } = useAuth();
@@ -12,7 +12,12 @@ export default function Transactions() {
     useState<TransactionsResponse | null>(null);
   const [incomeSelected, setIncomeSelected] = useState(false);
   const [expenseSelected, setExpenseSelected] = useState(false);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const currPage = transactionsData?.transactions.page;
+  const totalPages = transactionsData?.transactions.totalPages;
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!user) {
@@ -21,48 +26,31 @@ export default function Transactions() {
   }, [user, navigate]);
 
   useEffect(() => {
+    const timeout = setTimeout(() => setDebouncedQuery(query), 400);
+    return () => clearTimeout(timeout);
+  }, [query]);
+
+  useEffect(() => {
     const fetchData = async () => {
+      const filter = incomeSelected
+        ? 'income'
+        : expenseSelected
+          ? 'expense'
+          : undefined;
       try {
-        const data = await getTransactions();
+        const data = await getTransactions(page, filter, debouncedQuery);
         setTransactions(data);
-        console.log(data);
       } catch (err) {
         console.error(err);
       }
     };
     fetchData();
-  }, []);
+  }, [page, incomeSelected, expenseSelected, debouncedQuery]);
 
-  const transactions = useMemo(() => {
-    if (incomeSelected && query.length !== 0) {
-      return transactionsData?.transactions.filter(
-        (t) =>
-          t.transactionType === 'income' &&
-          t.name.toLowerCase().includes(query.toLowerCase()),
-      );
-    } else if (expenseSelected && query.length !== 0) {
-      return transactionsData?.transactions.filter(
-        (t) =>
-          t.transactionType === 'expense' &&
-          t.name.toLowerCase().includes(query.toLowerCase()),
-      );
-    } else if (incomeSelected) {
-      return transactionsData?.transactions.filter(
-        (t) => t.transactionType === 'income',
-      );
-    } else if (expenseSelected) {
-      return transactionsData?.transactions.filter(
-        (t) => t.transactionType === 'expense',
-      );
-    } else if (!incomeSelected && !expenseSelected && query.length > 0) {
-      return transactionsData?.transactions.filter((t) =>
-        t.name.toLowerCase().includes(query.toLowerCase()),
-      );
-    } else return transactionsData?.transactions;
-  }, [incomeSelected, expenseSelected, transactionsData, query]);
+  const transactions = transactionsData?.transactions.data;
 
   return (
-    <section className="flex flex-col flex-1 items-start py-5 pb-15 px-5 ">
+    <section className="flex flex-col flex-1 items-center py-5 pb-15 px-5 ">
       <h1 className="font-bold text-2xl ">Transactions</h1>
       <span className="text-muted-foreground">
         Track and manage all your income and expenses
@@ -121,12 +109,16 @@ export default function Transactions() {
           placeholder="Search transactions..."
           className="py-2 px-5 border-border border rounded-xl hover:shadow-md transaction-all duration-200"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setPage(1);
+          }}
         />
         <button
           onClick={() => {
             setIncomeSelected((prev) => !prev);
             setExpenseSelected(false);
+            setPage(1);
           }}
           className={`${incomeSelected && 'bg-primary text-white'} flex items-center border-border border py-2 px-2 pr-4 rounded-xl cursor-pointer hover:shadow-md transaction-all duration-200`}
         >
@@ -140,6 +132,7 @@ export default function Transactions() {
           onClick={() => {
             setExpenseSelected((prev) => !prev);
             setIncomeSelected(false);
+            setPage(1);
           }}
           className={`${expenseSelected && 'bg-[#e95f63] text-white'} flex items-center border-border border py-2 px-2 pr-4 rounded-xl cursor-pointer hover:shadow-md transaction-all duration-200`}
         >
@@ -158,10 +151,10 @@ export default function Transactions() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1fr gap-4 items-center w-full max-w-300 self-center">
-        {transactions
-          ?.map((t) => (
-            <Transaction
+      <div className="flex flex-col w-full max-w-5xl mt-4 ">
+        {transactions && transactions?.length > 0 ? (
+          transactions?.map((t) => (
+            <TransactionComp
               key={t.id}
               category={t.category}
               name={t.name}
@@ -170,7 +163,22 @@ export default function Transactions() {
               amount={t.price}
             />
           ))
-          .reverse()}
+        ) : (
+          <span className="text-muted-foreground text-center">
+            There are no transactions to show
+          </span>
+        )}
+      </div>
+      <div className="flex gap-2 self-center mt-8">
+        {Array.from({ length: totalPages! }, (_, i) => (
+          <button
+            className={`cursor-pointer hover:opacity-80 transition-all duration-100 px-2 rounded ${currPage === i + 1 ? 'bg-primary text-white' : 'bg-muted-foreground/40 text-foreground'}`}
+            key={i + 1}
+            onClick={() => setPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </section>
   );

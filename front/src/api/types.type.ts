@@ -38,10 +38,17 @@ export interface DashboardResponse {
 }
 
 export interface TransactionsResponse {
-  transactions: Transaction[];
-  income: number;
-  expense: number;
+  transactions: TransactionPage;
   balance: number;
+  expense: number;
+  income: number;
+}
+
+export interface TransactionPage {
+  data: Transaction[];
+  page: number;
+  total: number;
+  totalPages: number;
 }
 
 export interface CreateTransactionPayload {
