@@ -14,8 +14,13 @@ export class SubscriptionsService {
     private readonly subscriptionsRepository: SubscriptionsRepository,
   ) {}
 
-  async findSubs(userId: string): Promise<Subscription[]> {
-    return await this.subscriptionsRepository.findSubs(userId);
+  async findSubs(userId: string, page: number, limit: number, search?: string) {
+    return await this.subscriptionsRepository.findSubs(
+      userId,
+      page,
+      limit,
+      search,
+    );
   }
 
   async findSubById(userId: string, subId: string): Promise<Subscription> {

@@ -33,4 +33,9 @@ export class DashboardController {
       search,
     );
   }
+
+  @Get('/subscriptions')
+  public async getSubscriptions(@CurrentUser() user: Payload) {
+    return await this.dashboardService.getSubscriptions(user.sub);
+  }
 }

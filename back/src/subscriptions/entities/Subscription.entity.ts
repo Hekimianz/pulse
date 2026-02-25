@@ -27,6 +27,13 @@ export enum SubLength {
   ANNUAL = 'Annual',
 }
 
+export interface SubscriptionsPageResponse {
+  data: Subscription[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
 @Entity()
 export class Subscription {
   @PrimaryGeneratedColumn('uuid')

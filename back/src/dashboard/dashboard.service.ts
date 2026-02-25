@@ -7,10 +7,15 @@ import {
 } from 'src/transactions/entities/Transaction.entity';
 import { TransactionsService } from 'src/transactions/transactions.service';
 import { UsersService } from 'src/users/users.service';
-import { DashboardResponse, TransactionsResponse } from './dashboard.type';
+import {
+  DashboardResponse,
+  SubscriptionsResponse,
+  TransactionsResponse,
+} from './dashboard.type';
 import {
   SubLength,
   Subscription,
+  SubscriptionsPageResponse,
 } from 'src/subscriptions/entities/Subscription.entity';
 
 @Injectable()
@@ -114,10 +119,14 @@ export class DashboardService {
     return +(expenses / daysPassed).toFixed(2);
   }
 
-  async getMonthlySubs(userId: string): Promise<number> {
-    const subs = await this.subscriptionsService.findSubs(userId);
+  async getMonthlySubs(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<number> {
+    const subs = await this.subscriptionsService.findSubs(userId, page, limit);
 
-    const monthlyTotal = subs
+    const monthlyTotal = subs.data
       .filter((sub) => sub.active)
       .reduce((total, sub) => {
         const price = +sub.price;
@@ -137,14 +146,22 @@ export class DashboardService {
     return +monthlyTotal.toFixed(2);
   }
 
-  async totalActiveSubs(userId: string): Promise<number> {
-    const subs = await this.subscriptionsService.findSubs(userId);
-    return subs.filter((sub) => sub.active).length;
+  async totalActiveSubs(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<number> {
+    const subs = await this.subscriptionsService.findSubs(userId, page, limit);
+    return subs.data.filter((sub) => sub.active).length;
   }
 
-  async mostExpensiveSub(userId: string): Promise<Subscription | null> {
-    const subs = await this.subscriptionsService.findSubs(userId);
-    const activeSubs = subs.filter((sub) => sub.active);
+  async mostExpensiveSub(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<Subscription | null> {
+    const subs = await this.subscriptionsService.findSubs(userId, page, limit);
+    const activeSubs = subs.data.filter((sub) => sub.active);
     if (activeSubs.length < 1) return null;
     return activeSubs.reduce((max, obj) => (obj.price > max.price ? obj : max));
   }
@@ -171,6 +188,21 @@ export class DashboardService {
       search,
     );
     return transactions;
+  }
+
+  async getAllSubscriptions(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+    search?: string,
+  ): Promise<SubscriptionsPageResponse> {
+    const subs = await this.subscriptionsService.findSubs(
+      userId,
+      page,
+      limit,
+      search,
+    );
+    return subs;
   }
 
   async getDashboard(userId: string): Promise<DashboardResponse> {
@@ -210,6 +242,25 @@ export class DashboardService {
       income: await this.getIncomes(userId),
       expense: await this.getExpenses(userId),
       balance: await this.getBalance(userId),
+    };
+  }
+
+  async getSubscriptions(
+    userId: string,
+    page: number = 10,
+    limit: number = 10,
+    search?: string,
+  ): Promise<SubscriptionsResponse> {
+    return {
+      subscriptions: await this.subscriptionsService.findSubs(
+        userId,
+        page,
+        limit,
+        search,
+      ),
+      monthlySubs: await this.getMonthlySubs(userId),
+      yearlySubs: (await this.getMonthlySubs(userId)) * 12,
+      mostExpensiveSub: await this.mostExpensiveSub(userId),
     };
   }
 }

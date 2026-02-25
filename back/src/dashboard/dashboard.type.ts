@@ -1,4 +1,7 @@
-import { Subscription } from 'src/subscriptions/entities/Subscription.entity';
+import {
+  Subscription,
+  SubscriptionsPageResponse,
+} from 'src/subscriptions/entities/Subscription.entity';
 import {
   Transaction,
   TransactionPageResponse,
@@ -26,4 +29,11 @@ export interface TransactionsResponse {
   income: number;
   expense: number;
   balance: number;
+}
+
+export interface SubscriptionsResponse {
+  subscriptions: SubscriptionsPageResponse;
+  monthlySubs: number;
+  yearlySubs: number;
+  mostExpensiveSub: Subscription | null;
 }

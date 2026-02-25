@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
@@ -21,8 +22,18 @@ export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
   @Get()
-  public async findSubs(@CurrentUser() user: Payload): Promise<Subscription[]> {
-    return await this.subscriptionsService.findSubs(user.sub);
+  public async findSubs(
+    @CurrentUser() user: Payload,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ) {
+    return await this.subscriptionsService.findSubs(
+      user.sub,
+      page,
+      limit,
+      search,
+    );
   }
 
   @Get(':id')
